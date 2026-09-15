@@ -357,6 +357,39 @@
 
   .backup-actions{display:flex;flex-direction:column;gap:8px;}
   .hidden-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;}
+
+  /* ---- Compartir, buscador, forma de pago ---- */
+  .share-btn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
+    border-radius:14px;padding:12px;font-size:.9rem;font-weight:700;margin-bottom:18px;
+  }
+  .share-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+  .pay-summary{font-size:.8rem;color:var(--ink-muted);margin:-8px 0 16px;}
+
+  .search-wrap{position:relative;margin-bottom:16px;}
+  .search-wrap svg{
+    position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    width:18px;height:18px;color:var(--ink-muted);pointer-events:none;
+  }
+  .search-wrap input{
+    width:100%;padding:12px 40px;border-radius:13px;
+    border:1.5px solid var(--border);background:var(--surface-2);
+    color:var(--ink);font-size:.95rem;
+  }
+  .search-clear{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:var(--ink-muted);
+    font-size:1.1rem;line-height:1;padding:6px;
+  }
+
+  .pay-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  .pay-btn{
+    padding:12px;border-radius:13px;border:1.5px solid var(--border);
+    background:var(--surface-2);color:var(--ink-muted);font-size:.9rem;font-weight:700;
+  }
+  .pay-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-hover);}
 </style>
 
 <div class="app" id="app">
@@ -463,7 +496,7 @@
   }
 
   var state = loadState();
-  var ui = { tab:"hoy", cart:[], modal:null, dismissedSeedNote:false };
+  var ui = { tab:"hoy", cart:[], modal:null, dismissedSeedNote:false, search:"", payMethod:"efectivo" };
 
   function knownCategories(){
     var set = {};
@@ -495,11 +528,29 @@
     var gastos = expenses.reduce(function(a,e){ return a+e.amount; },0);
     var gananciaBruta = ventas-costo;
     var ganancia = gananciaBruta-gastos;
-    return {key:key, sales:sales, expenses:expenses, ventas:ventas, gastos:gastos, gananciaBruta:gananciaBruta, ganancia:ganancia};
+    var cashTotal = sales.filter(function(s){ return (s.paymentMethod||"efectivo")==="efectivo"; }).reduce(function(a,s){ return a+s.total; },0);
+    var transferTotal = sales.filter(function(s){ return s.paymentMethod==="transferencia"; }).reduce(function(a,s){ return a+s.total; },0);
+    return {key:key, sales:sales, expenses:expenses, ventas:ventas, gastos:gastos, gananciaBruta:gananciaBruta, ganancia:ganancia, cashTotal:cashTotal, transferTotal:transferTotal};
   }
 
   function lowStockProducts(){
     return state.products.filter(function(p){ return p.stock<=p.lowStock; });
+  }
+
+  // ---------- compartir resumen ----------
+  function shareToday(){
+    var today = dayAggregate(todayKey());
+    var fecha = new Date().toLocaleDateString("es-EC",{weekday:"long",day:"numeric",month:"long"});
+    var text = "📋 Resumen de hoy (" + fecha + ")\n"
+      + "Vendiste: " + money(today.ventas) + " (" + today.sales.length + " venta" + (today.sales.length===1?"":"s") + ")\n"
+      + "Gastaste: " + money(today.gastos) + "\n"
+      + "Ganaste: " + money(today.ganancia) + " limpio\n\n"
+      + "— Caja Mariuxi";
+    if(navigator.share){
+      navigator.share({text:text}).catch(function(){});
+    }else{
+      window.open("https://wa.me/?text="+encodeURIComponent(text), "_blank");
+    }
   }
 
   // ---------- render root ----------
@@ -513,6 +564,12 @@
     var tabChanged = lastRenderedTab!==ui.tab;
     lastRenderedTab = ui.tab;
 
+    // conservar foco y cursor de un input dentro de #main (ej: el buscador) al re-renderizar
+    var active = document.activeElement;
+    var focusedId = (active && main.contains(active)) ? active.id : null;
+    var selStart = focusedId && active.selectionStart!=null ? active.selectionStart : null;
+    var selEnd = focusedId && active.selectionEnd!=null ? active.selectionEnd : null;
+
     if(ui.tab==="hoy") main.innerHTML = renderHoy();
     else if(ui.tab==="vender") main.innerHTML = renderVender();
     else if(ui.tab==="gastos") main.innerHTML = renderGastos();
@@ -522,6 +579,12 @@
       main.classList.remove("view-enter");
       void main.offsetWidth;
       main.classList.add("view-enter");
+    }else if(focusedId){
+      var restored = document.getElementById(focusedId);
+      if(restored){
+        restored.focus();
+        if(selStart!=null){ try{ restored.setSelectionRange(selStart, selEnd); }catch(e){} }
+      }
     }
 
     renderFab();
@@ -544,10 +607,16 @@
       + '<div class="tile ganancia"><div class="tile-label">Ganaste</div><div class="tile-value mono">'+money(today.ganancia)+'</div><div class="tile-sub">limpio de hoy</div></div>'
       + '</div>';
 
+    if(today.sales.length){
+      html += '<div class="pay-summary">💵 '+money(today.cashTotal)+' efectivo &nbsp;·&nbsp; 🏦 '+money(today.transferTotal)+' transferencia</div>';
+    }
+
     if(low.length){
       html += '<div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.7 18a1.6 1.6 0 0 0 1.4 2.4h15.8a1.6 1.6 0 0 0 1.4-2.4L13.7 3.9a1.6 1.6 0 0 0-2.8 0Z"/></svg>'
         + '<span>Se te está acabando: '+low.map(function(p){return escapeHtml(p.name);}).join(", ")+'</span></div>';
     }
+
+    html += '<button class="share-btn" data-action="share-today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.6" x2="15.7" y2="6.7"/><line x1="8.3" y1="13.4" x2="15.7" y2="17.3"/></svg>Compartir resumen de hoy</button>';
 
     html += '<div class="section-title">Lo de hoy</div>';
     var items = today.sales.map(function(s){ return {type:"venta",time:s.createdAt,ref:s}; })
@@ -561,9 +630,10 @@
         if(it.type==="venta"){
           var s = it.ref;
           var label = s.items.map(function(i){ return i.qty+"× "+escapeHtml(i.name); }).join(", ");
+          var payLabel = s.paymentMethod==="transferencia" ? "Transferencia" : "Efectivo";
           return '<div class="list-row">'
             + '<div class="row-dot in">V</div>'
-            + '<div class="row-main"><div class="row-title">'+label+'</div><div class="row-sub">'+timeLabel(s.createdAt)+'</div></div>'
+            + '<div class="row-main"><div class="row-title">'+label+'</div><div class="row-sub">'+timeLabel(s.createdAt)+' · '+payLabel+'</div></div>'
             + '<div class="row-amount in">+'+money(s.total)+'</div>'
             + '<button class="row-del" data-action="del-sale" data-id="'+s.id+'" aria-label="Eliminar venta">✕</button>'
             + '</div>';
@@ -597,10 +667,21 @@
   // ---------- Vender ----------
   function renderVender(){
     var cats = knownCategories();
-    var active = state.products.filter(function(p){ return true; });
-    if(!active.length) return '<div class="empty-state">Aún no agregaste productos.<br>Anda a Inventario y suma el primero 🙂</div>';
+    if(!state.products.length) return '<div class="empty-state">Aún no agregaste productos.<br>Anda a Inventario y suma el primero 🙂</div>';
 
-    var html = "";
+    var q = ui.search.trim().toLowerCase();
+    var html = '<div class="search-wrap">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>'
+      + '<input id="ventaSearch" type="text" placeholder="Buscar producto..." value="'+escapeHtml(ui.search)+'">'
+      + (ui.search ? '<button class="search-clear" data-action="clear-search" aria-label="Borrar búsqueda">✕</button>' : '')
+      + '</div>';
+
+    var active = state.products.filter(function(p){ return !q || p.name.toLowerCase().indexOf(q)>=0; });
+    if(!active.length){
+      html += '<div class="empty-state">No encontramos ningún producto con ese nombre.</div>';
+      return html;
+    }
+
     cats.forEach(function(cat){
       var prods = active.filter(function(p){ return p.category===cat; });
       if(!prods.length) return;
@@ -714,6 +795,10 @@
           + '<div class="stepper"><button data-action="cart-dec" data-id="'+c.productId+'">–</button><span class="stepper-qty">'+c.qty+'</span><button data-action="cart-inc" data-id="'+c.productId+'">+</button></div></div>';
       }).join("");
       body += '<div class="cart-total-row"><span>Total</span><span class="mono">'+money(total)+'</span></div>';
+      body += '<div class="pay-toggle">'
+        + '<button class="pay-btn '+(ui.payMethod==="efectivo"?"active":"")+'" data-action="set-pay" data-value="efectivo">💵 Efectivo</button>'
+        + '<button class="pay-btn '+(ui.payMethod==="transferencia"?"active":"")+'" data-action="set-pay" data-value="transferencia">🏦 Transferencia</button>'
+        + '</div>';
       body += '<button class="btn primary" data-action="confirm-sale">Registrar venta</button>';
       body += '<button class="btn ghost" data-action="close-modal">Seguir vendiendo</button>';
     }
@@ -803,6 +888,7 @@
       total: total,
       totalCost: totalCost,
       profit: round2(total-totalCost),
+      paymentMethod: ui.payMethod,
       createdAt: new Date().toISOString()
     };
     ui.cart.forEach(function(c){
@@ -812,6 +898,7 @@
     state.sales.push(sale);
     ui.cart = [];
     ui.modal = null;
+    ui.payMethod = "efectivo";
     saveState();
     render();
     showToast("¡Venta registrada! "+money(sale.total));
@@ -956,6 +1043,13 @@
     ev.target.value = "";
   });
 
+  document.body.addEventListener("input", function(ev){
+    if(ev.target && ev.target.id==="ventaSearch"){
+      ui.search = ev.target.value;
+      render();
+    }
+  });
+
   document.body.addEventListener("click", function(ev){
     var el = ev.target.closest("[data-action]");
     if(!el) return;
@@ -964,7 +1058,10 @@
 
     if(action==="cart-inc") cartInc(id);
     else if(action==="cart-dec") cartDec(id);
-    else if(action==="open-checkout"){ ui.modal={type:"checkout"}; render(); }
+    else if(action==="open-checkout"){ ui.modal={type:"checkout"}; ui.payMethod="efectivo"; render(); }
+    else if(action==="set-pay"){ ui.payMethod=el.getAttribute("data-value"); render(); }
+    else if(action==="clear-search"){ ui.search=""; render(); }
+    else if(action==="share-today") shareToday();
     else if(action==="confirm-sale") confirmSale();
     else if(action==="close-modal") closeModal();
     else if(action==="new-expense"){ ui.modal={type:"new-expense"}; render(); }
