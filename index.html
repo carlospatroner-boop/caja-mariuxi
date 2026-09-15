@@ -2,88 +2,88 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Caja Mariuxi">
-<meta name="theme-color" content="#1E7A54">
+<meta name="theme-color" content="#FF7A45">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F2F4EE;
+    --bg:#FFF8ED;
     --surface:#FFFFFF;
-    --surface-2:#E8ECE1;
-    --border:#D7DECB;
-    --ink:#17241D;
-    --ink-muted:#5B6B5E;
-    --accent:#1E7A54;
-    --accent-hover:#166342;
+    --surface-2:#FFEFDA;
+    --border:#F3DCB4;
+    --ink:#4A3222;
+    --ink-muted:#8A6F52;
+    --accent:#FF7A45;
+    --accent-hover:#E8632E;
     --accent-ink:#FFFFFF;
-    --accent-soft:#E3F1E9;
-    --gain:#2166D6;
-    --gain-soft:#E6EEFC;
-    --danger:#C7402A;
-    --danger-soft:#FBE8E3;
-    --warning:#B8790F;
-    --warning-soft:#F7ECD3;
-    --shadow:rgba(23,36,29,.10);
+    --accent-soft:#FFE4D3;
+    --gain:#2FA66B;
+    --gain-soft:#E1F5E9;
+    --danger:#E5484D;
+    --danger-soft:#FDE8E8;
+    --warning:#A6720B;
+    --warning-soft:#FFF3D0;
+    --shadow:rgba(74,50,34,.14);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#10140F;
-      --surface:#171C15;
-      --surface-2:#1E2519;
-      --border:#2B3524;
-      --ink:#E8EEE2;
-      --ink-muted:#93A28C;
-      --accent:#3FAE79;
-      --accent-hover:#57C08D;
-      --accent-ink:#08160F;
-      --accent-soft:#1B3427;
-      --gain:#7EA8F5;
-      --gain-soft:#1B2A44;
-      --danger:#F1806B;
-      --danger-soft:#3A1D17;
-      --warning:#E8BB5B;
-      --warning-soft:#3A2C13;
+      --bg:#241A12;
+      --surface:#2E2118;
+      --surface-2:#3A2A1E;
+      --border:#4A3627;
+      --ink:#F5E9DA;
+      --ink-muted:#C2AA8E;
+      --accent:#FF9466;
+      --accent-hover:#FFA983;
+      --accent-ink:#241A12;
+      --accent-soft:#4A2E1D;
+      --gain:#4FCB8D;
+      --gain-soft:#1E3A2A;
+      --danger:#F27878;
+      --danger-soft:#4A2020;
+      --warning:#F0C34D;
+      --warning-soft:#4A3A14;
       --shadow:rgba(0,0,0,.45);
     }
   }
   :root[data-theme="dark"]{
-    --bg:#10140F;
-    --surface:#171C15;
-    --surface-2:#1E2519;
-    --border:#2B3524;
-    --ink:#E8EEE2;
-    --ink-muted:#93A28C;
-    --accent:#3FAE79;
-    --accent-hover:#57C08D;
-    --accent-ink:#08160F;
-    --accent-soft:#1B3427;
-    --gain:#7EA8F5;
-    --gain-soft:#1B2A44;
-    --danger:#F1806B;
-    --danger-soft:#3A1D17;
-    --warning:#E8BB5B;
-    --warning-soft:#3A2C13;
+    --bg:#241A12;
+    --surface:#2E2118;
+    --surface-2:#3A2A1E;
+    --border:#4A3627;
+    --ink:#F5E9DA;
+    --ink-muted:#C2AA8E;
+    --accent:#FF9466;
+    --accent-hover:#FFA983;
+    --accent-ink:#241A12;
+    --accent-soft:#4A2E1D;
+    --gain:#4FCB8D;
+    --gain-soft:#1E3A2A;
+    --danger:#F27878;
+    --danger-soft:#4A2020;
+    --warning:#F0C34D;
+    --warning-soft:#4A3A14;
     --shadow:rgba(0,0,0,.45);
   }
 
   *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;}
+  html{-webkit-text-size-adjust:100%;font-size:17px;}
   body{
     margin:0;
     background:var(--bg);
     color:var(--ink);
-    font-family:"Work Sans",system-ui,sans-serif;
+    font-family:"Nunito",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3,.brand,.tile-label,.section-title{
-    font-family:"Bricolage Grotesque","Work Sans",system-ui,sans-serif;
+  h1,h2,h3,.brand,.greeting,.tile-label,.section-title{
+    font-family:"Fredoka","Nunito",system-ui,sans-serif;
     text-wrap:balance;
   }
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  .mono{font-variant-numeric:tabular-nums;font-weight:800;}
   button,input,select,textarea{font-family:inherit;}
   button{cursor:pointer;}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
 
   .app{
     max-width:480px;
@@ -108,23 +108,23 @@
     justify-content:space-between;
     gap:10px;
   }
-  .brand{font-size:1.3rem;font-weight:700;line-height:1.1;margin:0;color:var(--ink);}
-  .brand-sub{margin:2px 0 0;font-size:.8rem;color:var(--ink-muted);text-transform:capitalize;}
+  .brand{font-size:1.5rem;font-weight:600;line-height:1.15;margin:0;color:var(--ink);}
+  .brand-sub{margin:3px 0 0;font-size:.85rem;color:var(--ink-muted);text-transform:capitalize;}
   .icon-btn{
     background:var(--surface-2);
     border:1px solid var(--border);
     color:var(--ink-muted);
-    border-radius:10px;
-    padding:7px 10px;
-    font-size:.72rem;
-    font-weight:600;
-    letter-spacing:.02em;
+    border-radius:14px;
+    padding:9px 12px;
+    font-size:.75rem;
+    font-weight:700;
+    letter-spacing:.01em;
     display:flex;
     align-items:center;
     gap:5px;
     flex-shrink:0;
   }
-  .icon-btn svg{width:15px;height:15px;}
+  .icon-btn svg{width:16px;height:16px;}
 
   main{
     flex:1;
@@ -149,46 +149,47 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:3px;
-    padding:6px 2px;
-    border-radius:10px;
+    gap:4px;
+    padding:8px 2px;
+    border-radius:14px;
     color:var(--ink-muted);
-    font-size:.68rem;
-    font-weight:600;
+    font-size:.74rem;
+    font-weight:700;
   }
-  .tab-btn svg{width:22px;height:22px;stroke:currentColor;}
-  .tab-btn.active{color:var(--accent);}
+  .tab-btn svg{width:26px;height:26px;stroke:currentColor;}
+  .tab-btn.active{color:var(--accent);background:var(--accent-soft);}
 
   .empty-state{
     text-align:center;
-    padding:36px 16px;
+    padding:40px 16px;
     color:var(--ink-muted);
-    font-size:.9rem;
+    font-size:.95rem;
+    line-height:1.5;
   }
 
   /* ---- Hoy ---- */
   .seed-note{
     background:var(--accent-soft);
     color:var(--accent-hover);
-    border-radius:12px;
-    padding:10px 13px;
-    font-size:.8rem;
-    margin-bottom:14px;
-    line-height:1.4;
+    border-radius:16px;
+    padding:12px 15px;
+    font-size:.85rem;
+    margin-bottom:16px;
+    line-height:1.5;
   }
-  .tile-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+  .tile-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
   .tile{
     background:var(--surface-2);
-    border-radius:14px;
-    padding:12px 10px;
-    border-left:3px solid var(--border);
+    border-radius:18px;
+    padding:13px 10px;
+    border-top:4px solid var(--border);
   }
   .tile.ventas{border-color:var(--accent);}
   .tile.gastos{border-color:var(--danger);}
   .tile.ganancia{border-color:var(--gain);}
-  .tile-label{font-size:.66rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;}
-  .tile-value{font-size:1.22rem;font-weight:600;margin-top:4px;}
-  .tile-sub{font-size:.68rem;color:var(--ink-muted);margin-top:2px;}
+  .tile-label{font-size:.68rem;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;}
+  .tile-value{font-size:1.18rem;margin-top:5px;}
+  .tile-sub{font-size:.7rem;color:var(--ink-muted);margin-top:2px;}
 
   .alert-banner{
     display:flex;
@@ -196,18 +197,19 @@
     gap:10px;
     background:var(--warning-soft);
     color:var(--warning);
-    border-radius:12px;
-    padding:10px 13px;
-    font-size:.82rem;
-    font-weight:500;
-    margin-bottom:16px;
+    border-radius:16px;
+    padding:12px 15px;
+    font-size:.86rem;
+    font-weight:600;
+    margin-bottom:18px;
+    line-height:1.4;
   }
-  .alert-banner svg{width:18px;height:18px;flex-shrink:0;}
+  .alert-banner svg{width:20px;height:20px;flex-shrink:0;}
 
   .section-title{
-    font-size:.9rem;
+    font-size:1rem;
     font-weight:600;
-    margin:0 0 8px;
+    margin:0 0 10px;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -216,55 +218,55 @@
   .list-row{
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:10px 0;
+    gap:11px;
+    padding:11px 0;
     border-bottom:1px solid var(--border);
   }
   .list-row:last-child{border-bottom:none;}
   .row-dot{
-    width:34px;height:34px;border-radius:9px;flex-shrink:0;
+    width:42px;height:42px;border-radius:13px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
-    font-size:.7rem;font-weight:700;
+    font-size:.78rem;font-weight:800;
   }
   .row-dot.in{background:var(--accent-soft);color:var(--accent-hover);}
   .row-dot.out{background:var(--danger-soft);color:var(--danger);}
   .row-main{flex:1;min-width:0;}
-  .row-title{font-size:.86rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .row-sub{font-size:.72rem;color:var(--ink-muted);margin-top:1px;}
-  .row-amount{font-size:.86rem;font-weight:600;flex-shrink:0;}
+  .row-title{font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .row-sub{font-size:.76rem;color:var(--ink-muted);margin-top:2px;}
+  .row-amount{font-size:.92rem;font-weight:800;flex-shrink:0;}
   .row-amount.in{color:var(--accent-hover);}
   .row-amount.out{color:var(--danger);}
   .row-del{
     background:none;border:none;color:var(--ink-muted);
-    font-size:1rem;line-height:1;padding:4px 2px;flex-shrink:0;
+    font-size:1.15rem;line-height:1;padding:6px;flex-shrink:0;
   }
 
   .hist-row{
     display:flex;align-items:center;justify-content:space-between;
-    padding:9px 0;border-bottom:1px solid var(--border);font-size:.8rem;
+    padding:10px 0;border-bottom:1px solid var(--border);font-size:.85rem;
   }
   .hist-row:last-child{border-bottom:none;}
-  .hist-day{font-weight:500;text-transform:capitalize;}
+  .hist-day{font-weight:600;text-transform:capitalize;}
   .hist-figs{display:flex;gap:12px;color:var(--ink-muted);}
-  .hist-figs b{color:var(--ink);font-weight:600;}
+  .hist-figs b{color:var(--ink);font-weight:800;}
 
   /* ---- Vender / Inventario ---- */
   .category-heading{
-    font-size:.72rem;font-weight:700;color:var(--ink-muted);
-    text-transform:uppercase;letter-spacing:.06em;
-    margin:18px 0 8px;
+    font-size:.78rem;font-weight:800;color:var(--ink-muted);
+    text-transform:uppercase;letter-spacing:.05em;
+    margin:20px 0 9px;
   }
   .category-heading:first-child{margin-top:0;}
   .product-row{
     display:flex;align-items:center;gap:10px;
-    background:var(--surface-2);border-radius:12px;
-    padding:10px 12px;margin-bottom:8px;
+    background:var(--surface-2);border-radius:16px;
+    padding:12px 13px;margin-bottom:9px;
   }
   .product-info{flex:1;min-width:0;}
-  .product-name{font-size:.87rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .product-meta{font-size:.72rem;color:var(--ink-muted);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .product-name{font-size:.94rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .product-meta{font-size:.78rem;color:var(--ink-muted);margin-top:3px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
   .stock-pill{
-    font-size:.63rem;font-weight:700;padding:1px 7px;border-radius:20px;
+    font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:20px;
   }
   .stock-pill.ok{background:var(--accent-soft);color:var(--accent-hover);}
   .stock-pill.low{background:var(--warning-soft);color:var(--warning);}
@@ -272,21 +274,21 @@
 
   .stepper{display:flex;align-items:center;gap:0;flex-shrink:0;}
   .stepper button{
-    width:30px;height:30px;border-radius:8px;border:1px solid var(--border);
-    background:var(--surface);color:var(--ink);font-size:1rem;font-weight:600;
+    width:40px;height:40px;border-radius:12px;border:1px solid var(--border);
+    background:var(--surface);color:var(--ink);font-size:1.2rem;font-weight:700;
     display:flex;align-items:center;justify-content:center;
   }
   .stepper button:disabled{opacity:.35;}
-  .stepper-qty{width:26px;text-align:center;font-weight:600;font-size:.85rem;}
+  .stepper-qty{width:32px;text-align:center;font-weight:800;font-size:.95rem;}
 
   .inv-row{
     display:flex;align-items:center;gap:10px;
-    background:var(--surface-2);border-radius:12px;
-    padding:10px 12px;margin-bottom:8px;
+    background:var(--surface-2);border-radius:16px;
+    padding:12px 13px;margin-bottom:9px;
     text-align:left;border:none;width:100%;
   }
-  .inv-figs{text-align:right;flex-shrink:0;font-size:.72rem;color:var(--ink-muted);}
-  .inv-figs .price{font-size:.86rem;font-weight:600;color:var(--ink);font-family:"IBM Plex Mono",monospace;}
+  .inv-figs{text-align:right;flex-shrink:0;font-size:.76rem;color:var(--ink-muted);}
+  .inv-figs .price{font-size:.94rem;font-weight:800;color:var(--ink);}
 
   .fab{
     position:fixed;
@@ -301,67 +303,67 @@
   .fab button{
     pointer-events:auto;
     background:var(--accent);color:var(--accent-ink);
-    border:none;border-radius:14px;
-    padding:11px 18px;font-size:.85rem;font-weight:600;
+    border:none;border-radius:16px;
+    padding:13px 20px;font-size:.92rem;font-weight:700;
     display:flex;align-items:center;gap:6px;
-    box-shadow:0 6px 18px var(--shadow);
+    box-shadow:0 8px 20px var(--shadow);
   }
 
   .cart-bar{
     position:sticky;bottom:0;
     background:var(--accent);color:var(--accent-ink);
-    border-radius:14px;
-    padding:12px 14px;
+    border-radius:18px;
+    padding:14px 16px;
     display:flex;align-items:center;justify-content:space-between;
-    margin-top:4px;
-    box-shadow:0 6px 18px var(--shadow);
+    margin-top:6px;
+    box-shadow:0 8px 20px var(--shadow);
   }
-  .cart-bar-info{font-size:.78rem;opacity:.9;}
-  .cart-bar-total{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1rem;}
+  .cart-bar-info{font-size:.82rem;opacity:.92;font-weight:600;}
+  .cart-bar-total{font-weight:800;font-size:1.12rem;}
   .cart-bar button{
-    background:rgba(255,255,255,.18);color:var(--accent-ink);
-    border:none;border-radius:9px;padding:9px 14px;font-weight:600;font-size:.82rem;
+    background:rgba(255,255,255,.22);color:var(--accent-ink);
+    border:none;border-radius:12px;padding:11px 18px;font-weight:700;font-size:.9rem;
   }
 
   /* ---- Modal ---- */
   .modal-overlay{
-    position:fixed;inset:0;background:rgba(10,16,10,.45);
+    position:fixed;inset:0;background:rgba(40,26,14,.5);
     display:flex;align-items:flex-end;justify-content:center;
     z-index:50;
   }
   .modal-sheet{
     width:100%;max-width:480px;
     background:var(--surface);
-    border-radius:20px 20px 0 0;
-    padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+    border-radius:26px 26px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
     max-height:88vh;overflow-y:auto;
   }
-  .modal-title{font-size:1.05rem;font-weight:700;margin:0 0 14px;}
-  .field{margin-bottom:12px;}
-  .field label{display:block;font-size:.74rem;font-weight:600;color:var(--ink-muted);margin-bottom:5px;}
+  .modal-title{font-size:1.2rem;font-weight:600;margin:0 0 15px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:.8rem;font-weight:700;color:var(--ink-muted);margin-bottom:6px;}
   .field input,.field select{
-    width:100%;padding:10px 11px;border-radius:10px;
-    border:1px solid var(--border);background:var(--surface-2);
-    color:var(--ink);font-size:.9rem;
+    width:100%;padding:12px 13px;border-radius:13px;
+    border:1.5px solid var(--border);background:var(--surface-2);
+    color:var(--ink);font-size:.98rem;
   }
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .btn{
-    width:100%;padding:12px;border-radius:12px;border:none;
-    font-size:.92rem;font-weight:600;margin-top:4px;
+    width:100%;padding:14px;border-radius:15px;border:none;
+    font-size:1rem;font-weight:700;margin-top:6px;
   }
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
   .btn.danger{background:var(--danger-soft);color:var(--danger);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);}
-  .cart-line{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+  .cart-line{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);}
   .cart-line:last-child{border-bottom:none;}
-  .cart-line-name{flex:1;font-size:.85rem;}
-  .cart-line-sub{font-size:.72rem;color:var(--ink-muted);}
-  .cart-total-row{display:flex;justify-content:space-between;align-items:center;padding-top:12px;font-size:1rem;font-weight:700;}
+  .cart-line-name{flex:1;font-size:.92rem;font-weight:600;}
+  .cart-line-sub{font-size:.76rem;color:var(--ink-muted);font-weight:400;}
+  .cart-total-row{display:flex;justify-content:space-between;align-items:center;padding-top:13px;font-size:1.1rem;font-weight:800;}
 
   .toast{
-    position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+    position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
     background:var(--ink);color:var(--bg);
-    padding:9px 16px;border-radius:20px;font-size:.8rem;font-weight:500;
+    padding:11px 18px;border-radius:20px;font-size:.86rem;font-weight:700;
     z-index:60;box-shadow:0 6px 18px var(--shadow);
     max-width:90%;text-align:center;
   }
@@ -373,12 +375,12 @@
 <div class="app" id="app">
   <header class="topbar">
     <div>
-      <p class="brand">Caja Mariuxi</p>
+      <p class="brand">¡Hola, Mariuxi! 👋</p>
       <p class="brand-sub" id="todayLabel"></p>
     </div>
     <button class="icon-btn" id="backupBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
-      Respaldo
+      Copia
     </button>
   </header>
 
@@ -536,27 +538,27 @@
     var html = "";
 
     if(state.seeded && !ui.dismissedSeedNote && state.sales.length===0 && state.expenses.length===0){
-      html += '<div class="seed-note">Agregamos algunos productos de ejemplo con precios referenciales (cervezas, colas, agua, golosinas) para que puedas probar. Edítalos o bórralos en la pestaña <b>Inventario</b>.</div>';
+      html += '<div class="seed-note">Te dejamos unos productos de ejemplo (cervezas, colas, agua, golosinas) con precios de muestra, para que pruebes la app. Los editas o borras cuando quieras desde <b>Inventario</b> 🙂</div>';
     }
 
     html += '<div class="tile-row">'
-      + '<div class="tile ventas"><div class="tile-label">Ventas</div><div class="tile-value mono">'+money(today.ventas)+'</div><div class="tile-sub">'+today.sales.length+' venta'+(today.sales.length===1?"":"s")+'</div></div>'
-      + '<div class="tile gastos"><div class="tile-label">Gastos</div><div class="tile-value mono">'+money(today.gastos)+'</div><div class="tile-sub">'+today.expenses.length+' registro'+(today.expenses.length===1?"":"s")+'</div></div>'
-      + '<div class="tile ganancia"><div class="tile-label">Ganancia</div><div class="tile-value mono">'+money(today.ganancia)+'</div><div class="tile-sub">neta de hoy</div></div>'
+      + '<div class="tile ventas"><div class="tile-label">Vendiste</div><div class="tile-value mono">'+money(today.ventas)+'</div><div class="tile-sub">'+today.sales.length+' venta'+(today.sales.length===1?"":"s")+'</div></div>'
+      + '<div class="tile gastos"><div class="tile-label">Gastaste</div><div class="tile-value mono">'+money(today.gastos)+'</div><div class="tile-sub">'+today.expenses.length+' registro'+(today.expenses.length===1?"":"s")+'</div></div>'
+      + '<div class="tile ganancia"><div class="tile-label">Ganaste</div><div class="tile-value mono">'+money(today.ganancia)+'</div><div class="tile-sub">limpio de hoy</div></div>'
       + '</div>';
 
     if(low.length){
       html += '<div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.7 18a1.6 1.6 0 0 0 1.4 2.4h15.8a1.6 1.6 0 0 0 1.4-2.4L13.7 3.9a1.6 1.6 0 0 0-2.8 0Z"/></svg>'
-        + '<span>Stock bajo: '+low.map(function(p){return escapeHtml(p.name);}).join(", ")+'</span></div>';
+        + '<span>Se te está acabando: '+low.map(function(p){return escapeHtml(p.name);}).join(", ")+'</span></div>';
     }
 
-    html += '<div class="section-title">Actividad de hoy</div>';
+    html += '<div class="section-title">Lo de hoy</div>';
     var items = today.sales.map(function(s){ return {type:"venta",time:s.createdAt,ref:s}; })
       .concat(today.expenses.map(function(e){ return {type:"gasto",time:e.createdAt,ref:e}; }));
     items.sort(function(a,b){ return new Date(b.time)-new Date(a.time); });
 
     if(!items.length){
-      html += '<div class="empty-state">Todavía no hay ventas ni gastos hoy.</div>';
+      html += '<div class="empty-state">Todavía no vendiste ni gastaste nada hoy.<br>¡Vamos por la primera venta! 💪</div>';
     }else{
       html += '<div>' + items.map(function(it){
         if(it.type==="venta"){
@@ -580,7 +582,7 @@
       }).join("") + '</div>';
     }
 
-    html += '<div class="section-title" style="margin-top:22px;">Últimos días</div>';
+    html += '<div class="section-title" style="margin-top:24px;">Cómo te fue estos días</div>';
     var rows = "";
     for(var i=1;i<=6;i++){
       var d = new Date(); d.setDate(d.getDate()-i);
@@ -588,9 +590,9 @@
       var agg = dayAggregate(key);
       if(agg.sales.length===0 && agg.expenses.length===0) continue;
       rows += '<div class="hist-row"><div class="hist-day">'+dayLabel(key)+'</div>'
-        + '<div class="hist-figs"><span>Vt <b>'+money(agg.ventas)+'</b></span><span>Gn <b>'+money(agg.ganancia)+'</b></span></div></div>';
+        + '<div class="hist-figs"><span>Ventas <b>'+money(agg.ventas)+'</b></span><span>Ganó <b>'+money(agg.ganancia)+'</b></span></div></div>';
     }
-    html += rows ? '<div>'+rows+'</div>' : '<div class="empty-state">Aún no hay historial de días anteriores.</div>';
+    html += rows ? '<div>'+rows+'</div>' : '<div class="empty-state">Todavía no hay historial de días anteriores.</div>';
 
     return html;
   }
@@ -599,7 +601,7 @@
   function renderVender(){
     var cats = knownCategories();
     var active = state.products.filter(function(p){ return true; });
-    if(!active.length) return '<div class="empty-state">Aún no tienes productos. Agrega alguno en la pestaña Inventario.</div>';
+    if(!active.length) return '<div class="empty-state">Aún no agregaste productos.<br>Anda a Inventario y suma el primero 🙂</div>';
 
     var html = "";
     cats.forEach(function(cat){
@@ -626,7 +628,7 @@
     var total = ui.cart.reduce(function(a,c){ return a+c.qty*c.price; },0);
     if(totalQty>0){
       html += '<div class="cart-bar"><div><div class="cart-bar-info">'+totalQty+' artículo'+(totalQty===1?"":"s")+'</div><div class="cart-bar-total">'+money(total)+'</div></div>'
-        + '<button data-action="open-checkout">Cobrar</button></div>';
+        + '<button data-action="open-checkout">¡Cobrar!</button></div>';
     }
     return html;
   }
@@ -634,9 +636,9 @@
   // ---------- Gastos ----------
   function renderGastos(){
     var sorted = state.expenses.slice().sort(function(a,b){ return new Date(b.createdAt)-new Date(a.createdAt); });
-    var html = '<div class="section-title">Gastos registrados</div>';
+    var html = '<div class="section-title">Tus gastos</div>';
     if(!sorted.length){
-      html += '<div class="empty-state">Aún no has registrado gastos.</div>';
+      html += '<div class="empty-state">Aún no has anotado gastos.<br>Cuando compres algo para el negocio, regístralo aquí.</div>';
     }else{
       html += '<div>'+sorted.slice(0,60).map(function(e){
         return '<div class="list-row">'
@@ -654,7 +656,7 @@
   function renderInventario(){
     var cats = knownCategories();
     var html = "";
-    if(!state.products.length) html += '<div class="empty-state">Aún no tienes productos.</div>';
+    if(!state.products.length) html += '<div class="empty-state">Aún no tienes productos.<br>Toca "+ Producto" para agregar el primero.</div>';
     cats.forEach(function(cat){
       var prods = state.products.filter(function(p){ return p.category===cat; });
       if(!prods.length) return;
@@ -709,7 +711,7 @@
 
     if(m.type==="checkout"){
       var total = ui.cart.reduce(function(a,c){ return a+c.qty*c.price; },0);
-      body = '<div class="modal-title">Confirmar venta</div>';
+      body = '<div class="modal-title">¿Confirmamos la venta?</div>';
       body += ui.cart.map(function(c){
         return '<div class="cart-line"><div class="cart-line-name">'+escapeHtml(c.name)+'<div class="cart-line-sub">'+c.qty+' × '+money(c.price)+'</div></div>'
           + '<div class="stepper"><button data-action="cart-dec" data-id="'+c.productId+'">–</button><span class="stepper-qty">'+c.qty+'</span><button data-action="cart-inc" data-id="'+c.productId+'">+</button></div></div>';
@@ -720,7 +722,7 @@
     }
 
     if(m.type==="new-expense"){
-      body = '<div class="modal-title">Nuevo gasto</div>'
+      body = '<div class="modal-title">Anota un gasto</div>'
         + '<div class="field"><label>Descripción</label><input id="f_desc" type="text" placeholder="Ej: compra de hielo"></div>'
         + '<div class="field-row">'
         + '<div class="field"><label>Categoría</label><input id="f_cat" list="catList" type="text" placeholder="Ej: Mercadería"></div>'
@@ -733,7 +735,7 @@
 
     if(m.type==="product"){
       var p = m.product || {name:"",category:"",price:"",cost:"",stock:"",lowStock:5};
-      body = '<div class="modal-title">'+(m.product?"Editar producto":"Nuevo producto")+'</div>'
+      body = '<div class="modal-title">'+(m.product?"Editar producto":"Agregar producto")+'</div>'
         + '<div class="field"><label>Nombre</label><input id="f_name" type="text" value="'+escapeHtml(p.name)+'" placeholder="Ej: Cerveza Pilsener 355ml"></div>'
         + '<div class="field"><label>Categoría</label><input id="f_pcat" list="catList" type="text" value="'+escapeHtml(p.category)+'" placeholder="Ej: Cervezas"></div>'
         + '<div class="field-row">'
@@ -751,17 +753,17 @@
     }
 
     if(m.type==="backup"){
-      body = '<div class="modal-title">Respaldo de datos</div>'
-        + '<p style="font-size:.85rem;color:var(--ink-muted);line-height:1.5;margin-top:0;">Tus datos se guardan en este iPhone/navegador. Descarga un respaldo de vez en cuando por si acaso, y guárdalo en Archivos o compártelo contigo misma.</p>'
+      body = '<div class="modal-title">Guarda una copia</div>'
+        + '<p style="font-size:.9rem;color:var(--ink-muted);line-height:1.55;margin-top:0;">Todo lo que anotas se guarda aquí mismo, en tu celular. De vez en cuando baja una copia por si las moscas, y guárdala donde prefieras (Archivos, correo, etc.).</p>'
         + '<div class="backup-actions">'
-        + '<button class="btn primary" data-action="export-backup">Descargar respaldo (.json)</button>'
-        + '<button class="btn ghost" data-action="trigger-import">Restaurar desde un respaldo</button>'
+        + '<button class="btn primary" data-action="export-backup">Bajar copia de mis datos</button>'
+        + '<button class="btn ghost" data-action="trigger-import">Restaurar una copia guardada</button>'
         + '</div>'
         + '<button class="btn ghost" data-action="close-modal">Cerrar</button>';
     }
 
     if(m.type==="confirm-delete-sale" || m.type==="confirm-delete-expense" || m.type==="confirm-delete-product"){
-      body = '<div class="modal-title">¿Eliminar este registro?</div>'
+      body = '<div class="modal-title">¿Segura que quieres borrar esto?</div>'
         + '<p style="font-size:.85rem;color:var(--ink-muted);">'+escapeHtml(m.message||"")+'</p>'
         + '<button class="btn danger" data-action="'+m.confirmAction+'" data-id="'+m.id+'">Sí, eliminar</button>'
         + '<button class="btn ghost" data-action="close-modal">Cancelar</button>';
@@ -815,7 +817,7 @@
     ui.modal = null;
     saveState();
     render();
-    showToast("Venta registrada: "+money(sale.total));
+    showToast("¡Venta registrada! "+money(sale.total));
   }
 
   function deleteSale(id){
@@ -829,7 +831,7 @@
     state.sales.splice(idx,1);
     saveState();
     closeModal();
-    showToast("Venta eliminada y stock repuesto");
+    showToast("Venta borrada y stock repuesto");
   }
 
   function deleteExpense(id){
@@ -838,7 +840,7 @@
     state.expenses.splice(idx,1);
     saveState();
     closeModal();
-    showToast("Gasto eliminado");
+    showToast("Gasto borrado");
   }
 
   function saveExpense(){
@@ -851,7 +853,7 @@
     saveState();
     ui.modal=null;
     render();
-    showToast("Gasto guardado");
+    showToast("¡Gasto guardado!");
   }
 
   function saveProduct(existingId){
@@ -875,14 +877,14 @@
     saveState();
     ui.modal=null;
     render();
-    showToast("Producto guardado");
+    showToast("¡Producto guardado!");
   }
 
   function deleteProduct(id){
     state.products = state.products.filter(function(p){ return p.id!==id; });
     saveState();
     closeModal();
-    showToast("Producto eliminado");
+    showToast("Producto borrado");
   }
 
   function exportBackup(){
@@ -892,7 +894,7 @@
     window.claude.use("downloads").then(function(downloads){
       if(!downloads){ fallbackDownload(payload, filename); return; }
       downloads.save({filename:filename, data:payload}).then(function(){
-        showToast("Respaldo descargado");
+        showToast("Copia descargada");
       }).catch(function(err){
         if(err && err.code==="declined") return;
         fallbackDownload(payload, filename);
@@ -908,9 +910,9 @@
       a.href = url; a.download = filename;
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("Respaldo descargado");
+      showToast("Copia descargada");
     }catch(e){
-      showToast("No se pudo generar el respaldo");
+      showToast("No se pudo generar la copia");
     }
   }
 
@@ -930,9 +932,9 @@
         saveState();
         ui.modal=null;
         render();
-        showToast("Respaldo restaurado");
+        showToast("¡Copia restaurada!");
       }catch(e){
-        showToast("Ese archivo no parece un respaldo válido");
+        showToast("Ese archivo no parece ser una copia válida");
       }
     };
     reader.readAsText(file);
