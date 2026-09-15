@@ -390,6 +390,20 @@
     background:var(--surface-2);color:var(--ink-muted);font-size:.9rem;font-weight:700;
   }
   .pay-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-hover);}
+
+  /* ---- Inicio: ¿qué quieres hacer? ---- */
+  .home-question{font-size:1.08rem;font-weight:600;margin:2px 0 12px;}
+  .home-actions{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .home-btn{
+    width:100%;display:flex;align-items:center;gap:13px;
+    padding:16px 17px;border-radius:18px;border:1.5px solid var(--border);
+    font-size:1.02rem;font-weight:700;text-align:left;
+  }
+  .home-btn .emoji{font-size:1.5rem;flex-shrink:0;}
+  .home-btn.sell{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .home-btn.buy{background:var(--surface);color:var(--ink);}
+  .buy-option{text-align:left;justify-content:flex-start;display:flex;align-items:center;gap:10px;background:var(--surface-2);color:var(--ink);}
+  .modal-hint{font-size:.82rem;color:var(--ink-muted);margin:-8px 0 14px;line-height:1.4;}
 </style>
 
 <div class="app" id="app">
@@ -505,6 +519,21 @@
     return Object.keys(set);
   }
 
+  function productOptionsGrouped(){
+    var cats = knownCategories();
+    var html = "";
+    cats.forEach(function(cat){
+      var prods = state.products.filter(function(p){ return p.category===cat; });
+      if(!prods.length) return;
+      html += '<optgroup label="'+escapeHtml(cat)+'">';
+      prods.forEach(function(p){
+        html += '<option value="'+p.id+'">'+escapeHtml(p.name)+'</option>';
+      });
+      html += '</optgroup>';
+    });
+    return html;
+  }
+
   function productById(id){
     for(var i=0;i<state.products.length;i++){ if(state.products[i].id===id) return state.products[i]; }
     return null;
@@ -596,6 +625,12 @@
     var today = dayAggregate(todayKey());
     var low = lowStockProducts();
     var html = "";
+
+    html += '<p class="home-question">¿Qué quieres hacer ahora?</p>';
+    html += '<div class="home-actions">'
+      + '<button class="home-btn sell" data-action="go-vender"><span class="emoji">🧾</span><span>Registrar una venta</span></button>'
+      + '<button class="home-btn buy" data-action="open-buy-chooser"><span class="emoji">🛍️</span><span>¿Hiciste una compra?</span></button>'
+      + '</div>';
 
     if(state.seeded && !ui.dismissedSeedNote && state.sales.length===0 && state.expenses.length===0){
       html += '<div class="seed-note">Te dejamos unos productos de ejemplo (cervezas, colas, agua, golosinas) con precios de muestra, para que pruebes la app. Los editas o borras cuando quieras desde <b>Inventario</b> 🙂</div>';
@@ -815,9 +850,32 @@
         + '<button class="btn ghost" data-action="close-modal">Cancelar</button>';
     }
 
+    if(m.type==="buy-chooser"){
+      body = '<div class="modal-title">¿Qué compraste?</div>'
+        + '<div class="backup-actions">'
+        + '<button class="btn buy-option" data-action="buy-restock"><span class="emoji">📦</span> Más stock de un producto que ya vendo</button>'
+        + '<button class="btn buy-option" data-action="buy-new-product"><span class="emoji">🆕</span> Un producto nuevo para vender</button>'
+        + '<button class="btn buy-option" data-action="buy-other-expense"><span class="emoji">🧺</span> Otra cosa (no es para vender)</button>'
+        + '</div>'
+        + '<button class="btn ghost" data-action="close-modal">Cancelar</button>';
+    }
+
+    if(m.type==="restock"){
+      body = '<div class="modal-title">Repón stock</div>'
+        + '<p class="modal-hint">Esto suma unidades al producto y lo anota como gasto de mercadería.</p>'
+        + '<div class="field"><label>Producto</label><select id="r_product">'+productOptionsGrouped()+'</select></div>'
+        + '<div class="field-row">'
+        + '<div class="field"><label>Cantidad comprada</label><input id="r_qty" type="number" step="1" min="1" value="1"></div>'
+        + '<div class="field"><label>Costo por unidad</label><input id="r_cost" type="number" step="0.01" min="0" placeholder="0.00"></div>'
+        + '</div>'
+        + '<button class="btn primary" data-action="save-restock">Guardar compra</button>'
+        + '<button class="btn ghost" data-action="close-modal">Cancelar</button>';
+    }
+
     if(m.type==="product"){
       var p = m.product || {name:"",category:"",price:"",cost:"",stock:"",lowStock:5};
       body = '<div class="modal-title">'+(m.product?"Editar producto":"Agregar producto")+'</div>'
+        + (m.logExpense ? '<p class="modal-hint">Se agregará a tu inventario y se anotará como gasto de mercadería.</p>' : '')
         + '<div class="field"><label>Nombre</label><input id="f_name" type="text" value="'+escapeHtml(p.name)+'" placeholder="Ej: Cerveza Pilsener 355ml"></div>'
         + '<div class="field"><label>Categoría</label><input id="f_pcat" list="catList" type="text" value="'+escapeHtml(p.category)+'" placeholder="Ej: Cervezas"></div>'
         + '<div class="field-row">'
@@ -952,16 +1010,38 @@
     if(isNaN(stock) || stock<0) stock=0;
     if(isNaN(lowStock) || lowStock<0) lowStock=5;
 
+    var shouldLogExpense = !existingId && ui.modal && ui.modal.logExpense;
+
     if(existingId){
       var p = productById(existingId);
       if(p){ p.name=name; p.category=category; p.price=round2(price); p.cost=round2(cost); p.stock=stock; p.lowStock=lowStock; }
     }else{
       state.products.push({id:uid(), name:name, category:category, price:round2(price), cost:round2(cost), stock:stock, lowStock:lowStock});
+      if(shouldLogExpense && stock>0 && cost>0){
+        state.expenses.push({id:uid(), description:"Compra: "+stock+" × "+name, category:"Mercadería", amount:round2(stock*cost), createdAt:new Date().toISOString()});
+      }
     }
     saveState();
     ui.modal=null;
     render();
-    showToast("¡Producto guardado!");
+    showToast(shouldLogExpense ? "¡Producto y compra registrados!" : "¡Producto guardado!");
+  }
+
+  function saveRestock(){
+    var productId = document.getElementById("r_product").value;
+    var qty = parseInt(document.getElementById("r_qty").value,10);
+    var cost = parseFloat(document.getElementById("r_cost").value);
+    var p = productById(productId);
+    if(!p){ showToast("Selecciona un producto"); return; }
+    if(!(qty>0)){ showToast("Ingresa una cantidad válida"); return; }
+    if(!(cost>=0)){ showToast("Ingresa un costo válido"); return; }
+    p.stock += qty;
+    p.cost = round2(cost);
+    state.expenses.push({id:uid(), description:"Compra: "+qty+" × "+p.name, category:"Mercadería", amount:round2(qty*cost), createdAt:new Date().toISOString()});
+    saveState();
+    ui.modal=null;
+    render();
+    showToast("¡Compra registrada! Se sumó al inventario.");
   }
 
   function deleteProduct(id){
@@ -1058,6 +1138,15 @@
 
     if(action==="cart-inc") cartInc(id);
     else if(action==="cart-dec") cartDec(id);
+    else if(action==="go-vender"){ ui.tab="vender"; render(); }
+    else if(action==="open-buy-chooser"){ ui.modal={type:"buy-chooser"}; render(); }
+    else if(action==="buy-restock"){
+      if(!state.products.length){ showToast("Primero agrega un producto en Inventario"); ui.modal=null; render(); }
+      else{ ui.modal={type:"restock"}; render(); }
+    }
+    else if(action==="buy-new-product"){ ui.modal={type:"product", product:null, logExpense:true}; render(); }
+    else if(action==="buy-other-expense"){ ui.modal={type:"new-expense"}; render(); }
+    else if(action==="save-restock") saveRestock();
     else if(action==="open-checkout"){ ui.modal={type:"checkout"}; ui.payMethod="efectivo"; render(); }
     else if(action==="set-pay"){ ui.payMethod=el.getAttribute("data-value"); render(); }
     else if(action==="clear-search"){ ui.search=""; render(); }
