@@ -555,11 +555,18 @@
     var ventas = sales.reduce(function(a,s){ return a+s.total; },0);
     var costo = sales.reduce(function(a,s){ return a+s.totalCost; },0);
     var gastos = expenses.reduce(function(a,e){ return a+e.amount; },0);
+    // La mercadería comprada ya se descuenta sola cuando se vende (como "costo").
+    // Si también restara aquí de la ganancia, el costo de cada producto se
+    // restaría dos veces. Por eso separamos: "gastos" (todo, para ver cuánto
+    // salió de la caja) vs "gastosOperativos" (solo lo que no es mercadería,
+    // que sí es una pérdida real y resta de la ganancia).
+    var gastosMercaderia = expenses.filter(function(e){ return e.category==="Mercadería"; }).reduce(function(a,e){ return a+e.amount; },0);
+    var gastosOperativos = round2(gastos-gastosMercaderia);
     var gananciaBruta = ventas-costo;
-    var ganancia = gananciaBruta-gastos;
+    var ganancia = gananciaBruta-gastosOperativos;
     var cashTotal = sales.filter(function(s){ return (s.paymentMethod||"efectivo")==="efectivo"; }).reduce(function(a,s){ return a+s.total; },0);
     var transferTotal = sales.filter(function(s){ return s.paymentMethod==="transferencia"; }).reduce(function(a,s){ return a+s.total; },0);
-    return {key:key, sales:sales, expenses:expenses, ventas:ventas, gastos:gastos, gananciaBruta:gananciaBruta, ganancia:ganancia, cashTotal:cashTotal, transferTotal:transferTotal};
+    return {key:key, sales:sales, expenses:expenses, ventas:ventas, gastos:gastos, gastosMercaderia:gastosMercaderia, gastosOperativos:gastosOperativos, gananciaBruta:gananciaBruta, ganancia:ganancia, cashTotal:cashTotal, transferTotal:transferTotal};
   }
 
   function lowStockProducts(){
@@ -638,7 +645,7 @@
 
     html += '<div class="tile-row">'
       + '<div class="tile ventas"><div class="tile-label">Vendiste</div><div class="tile-value mono">'+money(today.ventas)+'</div><div class="tile-sub">'+today.sales.length+' venta'+(today.sales.length===1?"":"s")+'</div></div>'
-      + '<div class="tile gastos"><div class="tile-label">Gastaste</div><div class="tile-value mono">'+money(today.gastos)+'</div><div class="tile-sub">'+today.expenses.length+' registro'+(today.expenses.length===1?"":"s")+'</div></div>'
+      + '<div class="tile gastos"><div class="tile-label">Gastaste</div><div class="tile-value mono">'+money(today.gastos)+'</div><div class="tile-sub">'+(today.gastosMercaderia>0 ? money(today.gastosMercaderia)+' en mercadería' : today.expenses.length+' registro'+(today.expenses.length===1?"":"s"))+'</div></div>'
       + '<div class="tile ganancia"><div class="tile-label">Ganaste</div><div class="tile-value mono">'+money(today.ganancia)+'</div><div class="tile-sub">limpio de hoy</div></div>'
       + '</div>';
 
