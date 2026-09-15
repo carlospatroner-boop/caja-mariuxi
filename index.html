@@ -873,7 +873,7 @@
         + '<div class="field"><label>Producto</label><select id="r_product">'+productOptionsGrouped()+'</select></div>'
         + '<div class="field-row">'
         + '<div class="field"><label>Cantidad comprada</label><input id="r_qty" type="number" step="1" min="1" value="1"></div>'
-        + '<div class="field"><label>Costo por unidad</label><input id="r_cost" type="number" step="0.01" min="0" placeholder="0.00"></div>'
+        + '<div class="field"><label>¿Cuánto pagaste por unidad? *</label><input id="r_cost" type="number" step="0.01" min="0.01" placeholder="Ej: 1.15"></div>'
         + '</div>'
         + '<button class="btn primary" data-action="save-restock">Guardar compra</button>'
         + '<button class="btn ghost" data-action="close-modal">Cancelar</button>';
@@ -886,8 +886,8 @@
         + '<div class="field"><label>Nombre</label><input id="f_name" type="text" value="'+escapeHtml(p.name)+'" placeholder="Ej: Cerveza Pilsener 355ml"></div>'
         + '<div class="field"><label>Categoría</label><input id="f_pcat" list="catList" type="text" value="'+escapeHtml(p.category)+'" placeholder="Ej: Cervezas"></div>'
         + '<div class="field-row">'
-        + '<div class="field"><label>Precio de venta</label><input id="f_price" type="number" step="0.01" min="0" value="'+p.price+'"></div>'
-        + '<div class="field"><label>Costo</label><input id="f_cost" type="number" step="0.01" min="0" value="'+p.cost+'"></div>'
+        + '<div class="field"><label>¿A cuánto lo compraste? *</label><input id="f_cost" type="number" step="0.01" min="0.01" placeholder="Ej: 1.10" value="'+p.cost+'"></div>'
+        + '<div class="field"><label>¿A cuánto lo vas a vender? *</label><input id="f_price" type="number" step="0.01" min="0.01" placeholder="Ej: 1.75" value="'+p.price+'"></div>'
         + '</div>'
         + '<div class="field-row">'
         + '<div class="field"><label>Stock actual</label><input id="f_stock" type="number" step="1" min="0" value="'+p.stock+'"></div>'
@@ -1013,7 +1013,8 @@
     var stock = parseInt(document.getElementById("f_stock").value,10);
     var lowStock = parseInt(document.getElementById("f_low").value,10);
     if(!name){ showToast("Escribe un nombre"); return; }
-    if(!(price>=0) || !(cost>=0)){ showToast("Revisa precio y costo"); return; }
+    if(!(cost>0)){ showToast("Falta: ¿a cuánto lo compraste?"); return; }
+    if(!(price>0)){ showToast("Falta: ¿a cuánto lo vas a vender?"); return; }
     if(isNaN(stock) || stock<0) stock=0;
     if(isNaN(lowStock) || lowStock<0) lowStock=5;
 
@@ -1041,7 +1042,7 @@
     var p = productById(productId);
     if(!p){ showToast("Selecciona un producto"); return; }
     if(!(qty>0)){ showToast("Ingresa una cantidad válida"); return; }
-    if(!(cost>=0)){ showToast("Ingresa un costo válido"); return; }
+    if(!(cost>0)){ showToast("Falta: ¿a cuánto lo compraste?"); return; }
     p.stock += qty;
     p.cost = round2(cost);
     state.expenses.push({id:uid(), description:"Compra: "+qty+" × "+p.name, category:"Mercadería", amount:round2(qty*cost), createdAt:new Date().toISOString()});
